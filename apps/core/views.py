@@ -9,7 +9,6 @@ from django.contrib import messages
 from django.contrib.auth import login
 
 from django.http import JsonResponse
-from django.shortcuts import render
 import json
 from math import radians, sin, cos, sqrt, atan2
 
@@ -65,6 +64,23 @@ def add_friend(request, username):
         )
     return redirect('index')
 
+def brew_page(request):
+    return render(request, 'core/brew_page.html')
+
+def brewing_view(request):
+    return render(request, 'core/brewing.html')
+
+# Simulate an active socket connection
+active_connections = 1  # Assume 1 active connection for demo purposes
+
+def check_for_socket(request):
+    # Check if there's an active connection or if we need to create a new one
+    if active_connections == 1:
+        # If one connection is already active, another user can join
+        return JsonResponse({'socket_available': True})
+    else:
+        # If no connection or pairings, create a new socket connection
+        return JsonResponse({'socket_available': False})
 
 def example_map(request):
     return render(request, "core/example.html")

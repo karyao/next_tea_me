@@ -125,6 +125,16 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
+cred = credentials.Certificate('nextteame-b50b1-firebase-adminsdk-fbsvc-4aa497beeb.json')
+firebase_admin.initialize_app(cred)
+
+# Access Firestore
+db = firestore.client()
 ASGI_APPLICATION = 'config.asgi.application'
 CHANNEL_LAYERS = {
     'default': {

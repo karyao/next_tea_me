@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Example</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            background-color: #f0f0f0;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Find Someone to</h1>
+    </header>
+
+    <button id="connect-button">Connect</button>
+    <button id="study-button">Study</button>
+    <button id="brew-button">Brew a Table</button>
+
+    <script>
+        // Get references to the buttons
+        const connectButton = document.getElementById('connect-button');
+        const studyButton = document.getElementById('study-button');
+        const brewButton = document.getElementById('brew-button');
+
+        // Add event listeners to the buttons
+        connectButton.addEventListener('click', () => {
+            window.location.href = '/brewing/'; // Redirect to the brewing page
+        });
+
+        studyButton.addEventListener('click', () => {
+            window.location.href = '/brewing/'; // Redirect to the brewing page
+        });
+
+        brewButton.addEventListener('click', () => {
+            window.location.href = '/brewing/'; // Redirect to the brewing page
+        });
+    </script>
+</body>
+</html>
