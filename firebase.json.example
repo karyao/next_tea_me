@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "example-project-id",
+    "private_key_id": "example-private-key-id",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nEXAMPLEPRIVATEKEY\n-----END PRIVATE KEY-----\n",
+    "client_email": "example-client-email@project-id.iam.gserviceaccount.com",
+    "client_id": "example-client-id",
+    "auth_uri": "https://example.com/o/oauth2/auth",
+    "token_uri": "https://example.com/oauth2/token",
+    "auth_provider_x509_cert_url": "https://example.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://example.com/robot/v1/metadata/x509/example-client-email@project-id.iam.gserviceaccount.com",
+    "universe_domain": "example.com"
+}
