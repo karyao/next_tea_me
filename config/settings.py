@@ -130,7 +130,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
-cred = credentials.Certificate('nextteame-b50b1-firebase-adminsdk-fbsvc-4aa497beeb.json')
+cred = credentials.Certificate('firebase_config.json')
 firebase_admin.initialize_app(cred)
 
 # Access Firestore

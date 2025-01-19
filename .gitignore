@@ -89,5 +89,5 @@ local_settings.py
 db.sqlite3
 
 venv/
-nextteame-b50b1-firebase-adminsdk-fbsvc-4aa497beeb.json
+firebase_config.json
 .venv
