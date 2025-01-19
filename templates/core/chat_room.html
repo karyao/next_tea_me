@@ -1,21 +1,61 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mx-auto p-4">
-    <h1 class="text-2xl mb-4">Chat with {{ friend.username }}</h1>
-    <div id="chat-log" class="h-96 overflow-y-auto border p-4 mb-4">
-        {% for message in messages %}
-            <div class="mb-2 {% if message.sender == request.user %}text-right{% endif %}">
-                <span class="text-sm text-gray-500">{{ message.sender.username }}:</span>
-                <p class="{% if message.sender == request.user %}bg-blue-100{% else %}bg-gray-100{% endif %} p-2 rounded inline-block">
-                    {{ message.content }}
-                </p>
-            </div>
-        {% endfor %}
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden;
+    }
+</style>
+<div style="width: 100%; height: 100vh; position: relative; background: #707D51;">
+    <!-- Header Section -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 92px; background: #707D51; display: flex; align-items: center; justify-content: space-between;">
+        <!-- Back Button -->
+        <div style="width: 40px; height: 40px; border: 2px solid white; border-radius: 50%; background: rgba(255, 255, 255, 0.3); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <div style="width: 6px; height: 12px; border-left: 2px solid white; border-bottom: 2px solid white; transform: rotate(45deg);"></div>
+        </div>
+        <!-- Friend's Profile Picture and Name -->
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="{{ friend.profile_image.url }}" alt="Profile Picture" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+            <span style="font-size: 20px; color: white; font-weight: bold;">{{ friend.username }}</span>
+        </div>
+        <!-- Placeholder for other icons -->
+        <div style="width: 40px; height: 40px;"></div>
     </div>
-    <div class="flex">
-        <input type="text" id="chat-message-input" class="flex-1 border p-2 mr-2">
-        <button id="chat-message-submit" class="bg-blue-500 text-white px-4 py-2 rounded">Send</button>
+
+    <!-- Chat Log Section -->
+    <div id="chat-log" style="position: absolute; top: 92px; bottom: 70px; width: 100%; overflow-y: auto; background: white; padding: 16px 16px 0px 0px;">
+        {% for message in messages %}
+    <div style="margin-bottom: 8px; display: flex; justify-content: {% if message.sender == request.user %}flex-end{% else %}flex-start{% endif %};">
+        <p style="
+            display: inline-block;
+            padding: 10px;
+            border-radius: 8px;
+            background: {% if message.sender == request.user %}#D9F7E5{% else %}#F4F4F4{% endif %};
+            color: #333;
+            max-width: 80%;
+            text-align: left;
+        ">
+            {{ message.content }}
+        </p>
+    </div>
+{% endfor %}
+
+    </div>
+
+    <!-- Input Section -->
+    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 70px; background: #F4FCD9; display: flex; align-items: center; padding: 0 16px; gap: 10px;">
+        <!-- Emoji Icon -->
+        <div style="width: 40px; height: 40px; background: #534350; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 18px; color: white;">😊</span>
+        </div>
+        <!-- Input Field -->
+        <input type="text" id="chat-message-input" placeholder="Start typing..." style="flex: 1; height: 40px; border: none; border-radius: 20px; padding: 0 12px; font-size: 16px; background: white; outline: none;">
+        <!-- Send Button -->
+        <button id="chat-message-submit" style="width: 60px; height: 40px; background: #704E36; color: white; border: none; border-radius: 20px; font-weight: bold;">Send</button>
     </div>
 </div>
 
@@ -29,10 +69,20 @@
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const messageDiv = document.createElement('div');
-        messageDiv.className = `mb-2 ${data.sender === "{{ request.user.username }}" ? 'text-right' : ''}`;
+        const isSender = data.sender === "{{ request.user.username }}";
+        
+        messageDiv.style.textAlign = isSender ? 'right' : 'left';
+        messageDiv.style.marginBottom = '8px';
         messageDiv.innerHTML = `
-            <span class="text-sm text-gray-500">${data.sender}:</span>
-            <p class="${data.sender === "{{ request.user.username }}" ? 'bg-blue-100' : 'bg-gray-100'} p-2 rounded inline-block">
+            <p style="
+                display: inline-block;
+                padding: 10px;
+                border-radius: 8px;
+                background: ${isSender ? '#D9F7E5' : '#F4F4F4'};
+                color: #333;
+                max-width: 80%;
+                text-align: left;
+            ">
                 ${data.message}
             </p>
         `;
