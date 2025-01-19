@@ -86,6 +86,7 @@ class FriendshipConsumer(AsyncWebsocketConsumer):
 
             # Accept connections for both users
             await self.accept()
+            #test
             await partner['consumer'].send(json.dumps({
                 'redirect': f'/add_friend/?partner={self.username}'
             }))
