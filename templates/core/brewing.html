@@ -91,7 +91,7 @@
     
             socket.onclose = () => {
                 // Reconnect logic
-                statusDiv.textContent = 'Waiting for a partner...';
+                statusDiv.textContent = 'Brewing a partner...';
                 setTimeout(() => {
                     connectToWebSocket();
                 }, 3000);

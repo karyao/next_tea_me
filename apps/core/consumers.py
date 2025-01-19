@@ -77,7 +77,7 @@ class FriendshipConsumer(AsyncWebsocketConsumer):
             }
             await self.accept()
             await self.send(json.dumps({
-                'message': 'Waiting for a partner...'
+                'message': 'Waiting for a teabag...'
             }))
         else:
             # Pair with the waiting user
@@ -97,3 +97,4 @@ class FriendshipConsumer(AsyncWebsocketConsumer):
         global waiting_user
         if waiting_user and waiting_user['consumer'] == self:
             waiting_user = None
+

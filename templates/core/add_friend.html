@@ -2,25 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Friend</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time for Tea</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FFC3A0, #FFAFBD);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #6B46C1;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        h2 {
+            color: #4A5568;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        p {
+            color: #718096;
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
-    <h1>Add a Friend</h1>
+    <div class="container">
+        <h1>Time for Tea</h1>
 
-    {% if partner %}
-        <h2>Partner: {{ partner.username }}</h2>
-        
-        {% if already_friends %}
-            <p>You are already friends with {{ partner.username }}.</p>
+        {% if partner %}
+            <h2>Teabag: {{ partner.username }}</h2>
+            
+            {% if already_friends %}
+                <p>You are already friends with {{ partner.username }}.</p>
+            {% else %}
+                <p>You have successfully added {{ partner.username }} as a friend!</p>
+            {% endif %}
+            
+            <a href="{% url 'chat_room' partner.username %}" class="btn">
+                Meet Now
+            </a>
         {% else %}
-            <p>You have successfully added {{ partner.username }} as a friend!</p>
-            <!-- Add Friend link -->
-            <a href="{% url 'add_friend' %}?partner={{ partner.username }}">Add Friend</a>
-
+            <p>No partner found. Please try again later or manually add a friend.</p>
+            <a href="/add-friend-manually" class="btn" style="background-color: #6B46C1;">
+                Add Friend Manually
+            </a>
         {% endif %}
-        
-    {% else %}
-        <p>No partner found.</p>
-    {% endif %}
+    </div>
 </body>
 </html>

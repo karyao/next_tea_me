@@ -90,12 +90,12 @@ def add_friend(request):
         ).exists()
 
         if existing_friendship:
-            return render(request, 'add_friend.html', {'partner': partner, 'already_friends': True})
+            return render(request, 'core/add_friend.html', {'partner': partner, 'already_friends': True})
 
         # If not friends, create the friendship
         Friendship.objects.create(user1=request.user, user2=partner)
 
-        return render(request, 'add_friend.html', {'partner': partner, 'already_friends': False})
+        return render(request, 'core/add_friend.html', {'partner': partner, 'already_friends': False})
 
     except Exception as e:
         return HttpResponseServerError(f"An error occurred: {str(e)}")
