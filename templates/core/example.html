@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,11 +8,279 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
+        /* Navbar Styles */
+      .navbar {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        z-index: 10;
+        gap: 20px; /* Increase spacing between nav items */
+        transform: none;
+      }
+
+      .nav-circle {
+        width: 70px; /* Increase the size of the circle */
+        height: 70px; /* Match the width for a perfect circle */
+        background-color: #707d51;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Slightly bigger shadow */
+        cursor: pointer;
+        overflow: hidden;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      .nav-circle img {
+        max-width: 60%; /* Adjust to fit the larger circle */
+        max-height: 60%; /* Scale proportionally */
+        object-fit: contain;
+        border-radius: 50%;
+      }
+
+      .nav-menu {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: white;
+        padding: 20px 30px; /* Increase padding for a larger navbar */
+        border-radius: 50px;
+        display: flex;
+        gap: 30px; /* Increase spacing between menu items */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .nav-menu.hidden {
+        opacity: 0;
+        transform: scale(0.8);
+        pointer-events: none;
+      }
+
+      .nav-item {
+        font-size: 1.5rem; /* Increase icon size */
+        color: #707d51; /* Adjust color if needed */
+        transition: color 0.3s ease;
+      }
+
+      .nav-item:hover {
+        color: #5c3b2a; /* Change color on hover */
+      }
+        /* General Reset */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'SF Pro Text', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f9f9f9; /* Light background color */
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .location {
+            font-size: 1rem;
+            color: #7e7e7e;
+        }
+
+        .header .search-icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header .search-icons i {
+            font-size: 1.2rem;
+            color: #7e7e7e;
+            cursor: pointer;
+        }
+
+        /* Interest Tags */
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+            background-color: white;
+            margin: 16px 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .interest-tag {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            color: #7e7e7e;
+            border-radius: 16px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            background-color: #fff;
+        }
+
+        .interest-tag:hover {
+            background-color: #bb9981; /* Active tag color */
+            color: white;
+            border: none;
+        }
+
+        /* Map Container */
+        #map-container {
+            margin: 20px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
         #map {
             height: 400px;
             width: 100%;
         }
+
+        /* Button Styles */
+        .get-location-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #707d51;
+            color: white;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .get-location-btn:hover {
+            background-color: #505b37;
+        }
+
+        /* Footer Navigation */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer .nav-icon {
+            font-size: 1.5rem;
+            color: #7e7e7e;
+        }
+
+        .footer .nav-icon.active {
+            color: #bb9981;
+        }
+        /* Button Styles */
+        .get-location-btn {
+    position: fixed;
+    bottom: 40px;
+    left: 20px;
+    background-color: #707D51; /* Green button */
+    color: white;
+    font-size: 1.2rem; /* Adjust font size */
+    border: none;
+    border-radius: 12px; /* Rounded corners for a square button */
+    width: 150px; /* Make the button wider */
+    height: 50px; /* Adjust the height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Floating effect */
+    transition: all 0.3s ease; /* Smooth hover transition */
+    text-align: center; /* Center the text */
+}
+
+/* Hover Effect */
+.get-location-btn:hover {
+    background-color: #4e5739; /* Darker green on hover */
+    transform: scale(1.05); /* Slight scaling on hover */
+}
+
+
+
     </style>
+</head>
+<body>
+    <!-- Circular Navbar -->
+    <div class="navbar">
+        <!-- Main Circle (Logo Button) -->
+        <div id="nav-button" class="nav-circle">
+          <img src="{% static 'images/icon.ico' %}" alt="Logo" />
+        </div>
+  
+        <!-- Expanded Navbar -->
+        <div id="nav-menu" class="nav-menu hidden">
+          <a href="{% url 'brew_page' %}" class="nav-item">
+            <i class="fas fa-home"></i>
+            <!-- <span>Home</span> -->
+          </a>
+          <a href="/map/" class="nav-item">
+            <i class="fas fa-map"></i>
+            <!-- <span>Map</span> -->
+          </a>
+          <a href="/messages/" class="nav-item">
+            <i class="fas fa-envelope"></i>
+            <!-- <span>Messages</span> -->
+          </a>
+          <a href="/settings/" class="nav-item">
+            <i class="fas fa-cog"></i>
+            <!-- <span>Settings</span> -->
+          </a>
+        </div>
+      </div>
+      
+    <!-- Header Section -->
+    <div class="header">
+        <div class="location">📍 Discover</div>
+        <div class="search-icons">
+            <i class="fas fa-search"></i>
+            <i class="fas fa-sliders-h"></i>
+        </div>
+    </div>
+
+    <!-- Interests Section -->
+    <div class="interests">
+        <div class="interest-tag">Football</div>
+        <div class="interest-tag">Nature</div>
+        <div class="interest-tag">Language</div>
+        <div class="interest-tag">Photography</div>
+        <div class="interest-tag">Music</div>
+        <div class="interest-tag">Writing</div>
+    </div>
+
+    <!-- Map Section -->
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+
+    <!-- Get Location Button -->
+<!-- Get Location Button -->
+<!-- <button class="get-location-btn" onclick="getLocation()">+</button> -->
+
     <script>
         function getLocation() { 
             if (navigator.geolocation) { 
@@ -104,10 +373,37 @@
 
         // Initialize the map when the page loads
         document.addEventListener('DOMContentLoaded', initializeMap);
+        const navButton = document.getElementById("nav-button");
+      const navMenu = document.getElementById("nav-menu");
+
+      navButton.addEventListener("click", () => {
+        navMenu.classList.toggle("hidden");
+        navButton.classList.toggle("hidden"); // Hide/show the nav button
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!navButton.contains(e.target) && !navMenu.contains(e.target)) {
+          navMenu.classList.add("hidden");
+          navButton.classList.remove("hidden"); // Show the nav button when clicking outside
+        }
+      });
+
+      // Add click handler for the menu itself
+      navMenu.addEventListener("click", (e) => {
+        // If clicking a navigation link, hide menu and show button
+        if (e.target.closest(".nav-item")) {
+          navMenu.classList.add("hidden");
+          navButton.classList.remove("hidden");
+        }
+      });
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     </script>
 </head>
 <body>
-    <button onclick="getLocation()">Get Location!!!</button>
+    <button class="get-location-btn"  onclick="getLocation()">Get Location!!!</button>
     <div id="map"></div>
 </body>
 </html>
