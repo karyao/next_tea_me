@@ -3,54 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Example</title>
+    <title>Responsive Design Example</title>
     <style>
+        /* General Styles */
         body {
-            font-family: sans-serif;
+            font-family: 'SF Pro Text', sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: white;
+        }
+
+        /* Container */
+        .container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
+            width: 90%;
+            max-width: 1200px;
         }
 
-        header {
-            background-color: #f0f0f0;
-            padding: 20px;
-            text-align: center;
-            width: 100%;
+        /* Responsive Layout for Image and Buttons */
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
 
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 32px;
+        .top-image {
+            padding-top: 50px;
+            width: 80%; /* Default size for smaller screens */
+            max-width: 500px;
+            height: auto;
+
+        }
+
+        header h1 {
+            margin-top: 0;
+            font-family: 'Konkhmer Sleokchher', sans-serif;
+            font-size: 2.5rem; /* Default size */
+            color: #22172A;
             text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Media Query for Larger Screens */
+        @media (min-width: 768px) {
+            header h1 {
+                font-size: 2rem; /* Bigger font size for larger screens */
+            }
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .button {
+            width: 295px;
+            height: 56px;
             border: none;
-            border-radius: 5px;
+            border-radius: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-family: 'Mplus 1p Bold', sans-serif;
+            font-weight: 700;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button.connect {
+            background-color: #704E36;
+            color: white;
+        }
+
+        .button.connect:hover {
+            background-color: #5c3b2a;
+        }
+
+        .button.study {
+            background-color: #707D51;
+            color: white;
+        }
+
+        .button.study:hover {
+            background-color: #505b37;
+        }
+
+        .button.create {
+            background-color: #BB9981;
+            color: white;
+        }
+
+        .button.create:hover {
+            background-color: #967a65;
+        }
+
+        @media (min-width: 768px) {
+            .content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .top-image {
+                width: 60%; /* Takes up half the width on larger screens */
+            }
+
+            .buttons {
+                align-items: flex-start; /* Align buttons to the left */
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Spill the Tea</h1>
-    </header>
-
-    <button id="connect-button">Brew</button>
+    <div class="container">
+        <!-- Content Wrapper -->
+        <div class="content">
+            <!-- Image -->
+            <img src="../../static/images/group.png" alt="Decorative Group" class="top-image">
+            
+            <!-- Text Header -->
+            <header>
+                <h1>Let’s meet new people around you</h1>
+            </header>
+            
+            <!-- Buttons -->
+            <div class="buttons">
+                <button id="connect-button" class="button connect">Connect</button>
+                <button id="study-button" class="button study">Study</button>
+                <button id="brew-button" class="button create">Create a Table</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Get references to the buttons
-        const connectButton = document.getElementById('connect-button');
+        // Button event listeners
+        document.getElementById('connect-button').addEventListener('click', () => {
+            window.location.href = '/brewing/';
+        });
 
-        // Add event listeners to the buttons
-        connectButton.addEventListener('click', () => {
-            window.location.href = '/brewing/'; // Redirect to the brewing page
+        document.getElementById('study-button').addEventListener('click', () => {
+            window.location.href = '/brewing/';
+        });
+
+        document.getElementById('brew-button').addEventListener('click', () => {
+            window.location.href = '/brewing/';
         });
     </script>
 </body>

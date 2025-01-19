@@ -1,0 +1,99 @@
+/* Base styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Konkhmer Sleokchher', sans-serif;
+    background: #707D51;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Spacing between elements */
+    width: 100%;
+    max-width: 400px; /* Adjust max width */
+    text-align: center;
+}
+
+/* Icon */
+.icon img {
+    width: 100px;
+    height: 100px;
+}
+
+/* Form */
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px; /* Spacing between form elements */
+}
+
+.input {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid white;
+    background: none;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    padding-top: 25px;
+}
+
+.input::placeholder {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    color: white;
+    opacity: 0.5;
+    margin-top: 150%;
+}
+
+.input.no-border {
+    padding-top: 0%;
+    border-bottom: none;
+    padding-bottom: 30px;
+}
+
+/* Login Button */
+.login-btn {
+    width: 100%;
+    max-width: 300px;
+    padding: 15px;
+    background: #F4FCD9;
+    border: none;
+    border-radius: 30px;
+    color: #534350;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background: #e4ebc8;
+}
+
+/* Forgot Password and Sign Up */
+.forgot-password, .signup {
+    color: white;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.highlight {
+    color: #F4FCD9;
+    cursor: pointer;
+}
+
+.highlight:hover {
+    text-decoration: underline;
+}
