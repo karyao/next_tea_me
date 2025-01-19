@@ -61,10 +61,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 class FriendshipConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        # Accept the WebSocket connection
-        await self.accept()
-        await self.send(text_data=json.dumps({"message": "Brewing complete!"}))
-        await self.send(text_data=json.dumps({"redirect": "/brew_page/"}))
+        global waiting_user
+
+        # Extract user information from query parameters (or another method)
+        self.username = self.scope['query_string'].decode().split('=')[1]  # Example: ws://host/ws/friendship/?username=John
+
+        if waiting_user is None:
+            # No one is waiting, so make this user wait
+            waiting_user = {
+                'consumer': self,
+                'username': self.username
+            }
+            await self.accept()
+            await self.send(json.dumps({
+                'message': 'Waiting for a teabag...'
+            }))
+        else:
+            # Pair with the waiting user
+            partner = waiting_user
+            waiting_user = None  # Clear the waiting user
+
+            # Accept connections for both users
+            await self.accept()
+            #test
+            await partner['consumer'].send(json.dumps({
+                'redirect': f'/add_friend/?partner={self.username}'
+            }))
+            await self.send(json.dumps({
+                'redirect': f'/add_friend/?partner={partner["username"]}'
+            }))
 
     async def disconnect(self, close_code):
         # Notify the frontend to redirect
