@@ -16,8 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from apps.core import views
+
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("map/", include("map.urls")),
+    path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
+    path('chat/<str:username>/', views.chat_room, name='chat_room'),
+    path('test-login/', views.test_login, name='test_login'),
+    path('switch-user/<str:username>/', views.switch_user, name='switch_user'),
+    path('add-friend/<str:username>/', views.add_friend, name='add_friend'),
+    path('map/',views.example_map, name='example'),
+    path('map/save-location/', views.save_location, name='save_location')
 ]

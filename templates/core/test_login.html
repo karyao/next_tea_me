@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Test Login</h2>
+    <div class="row">
+        <div class="col">
+            <a href="{% url 'switch_user' 'user1' %}" class="btn btn-primary">Login as User1</a>
+            <a href="{% url 'switch_user' 'user2' %}" class="btn btn-secondary">Login as User2</a>
+        </div>
+    </div>
+    
+    {% if request.user.is_authenticated %}
+    <div class="mt-3">
+        Currently logged in as: {{ request.user.username }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

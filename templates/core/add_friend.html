@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Friends List</h2>
+    <div class="mb-3">
+        <a href="{% url 'add_friend' 'user1' %}" class="btn btn-primary">Add User1</a>
+        <a href="{% url 'add_friend' 'user2' %}" class="btn btn-primary">Add User2</a>
+    </div>
+    <ul>
+    {% for friendship in friends %}
+        <li>
+            {% if friendship.user1 == request.user %}
+                <a href="{% url 'chat_room' friendship.user2.username %}">{{ friendship.user2.username }}</a>
+            {% else %}
+                <a href="{% url 'chat_room' friendship.user1.username %}">{{ friendship.user1.username }}</a>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
