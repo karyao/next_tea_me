@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Location!!!</title>
+    <title>Get Location and Display on Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
     <script>
         function getLocation() { 
             if (navigator.geolocation) { 
@@ -20,6 +28,9 @@
             // Log to console
             console.log("Latitude: " + latitude + ", Longitude: " + longitude);
 
+            // Update the map
+            updateMap(latitude, longitude);
+
             // Send location to the Django backend
             fetch('/map/save-location/', {
                 method: 'POST',
@@ -29,7 +40,6 @@
                 },
                 body: JSON.stringify({ latitude, longitude })
             })
-
             .then(response => response.json())
             .then(data => {
                 console.log("Server Response:", data);
@@ -72,9 +82,32 @@
             }
             return cookieValue;
         }
+
+        let map; // Declare the map variable
+
+        // Initialize the map
+        function initializeMap() {
+            map = L.map('map').setView([0, 0], 2); // Default to world view
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+        }
+
+        // Update the map with the user's location
+        function updateMap(latitude, longitude) {
+            map.setView([latitude, longitude], 100); // Zoom to user location
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup(`<b>Your Location:</b><br>Latitude: ${latitude}<br>Longitude: ${longitude}`)
+                .openPopup();
+        }
+
+        // Initialize the map when the page loads
+        document.addEventListener('DOMContentLoaded', initializeMap);
     </script>
 </head>
 <body>
     <button onclick="getLocation()">Get Location!!!</button>
+    <div id="map"></div>
 </body>
 </html>
