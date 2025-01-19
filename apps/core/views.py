@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import login
 
+from django.http import JsonResponse
+
 def index(request):
     if not request.user.is_authenticated:
         # Create test users if they don't exist
@@ -59,3 +61,21 @@ def add_friend(request, username):
             user2=friend
         )
     return redirect('index')
+
+def brew_page(request):
+    return render(request, 'core/brew_page.html')
+
+def brewing_view(request):
+    return render(request, 'core/brewing.html')
+
+# Simulate an active socket connection
+active_connections = 1  # Assume 1 active connection for demo purposes
+
+def check_for_socket(request):
+    # Check if there's an active connection or if we need to create a new one
+    if active_connections == 1:
+        # If one connection is already active, another user can join
+        return JsonResponse({'socket_available': True})
+    else:
+        # If no connection or pairings, create a new socket connection
+        return JsonResponse({'socket_available': False})

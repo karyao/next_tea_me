@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brewing</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .loading {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ccc;
+            border-radius: 50%;
+            border-top-color: #4CAF50;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Brewing</h1>
+        <div class="loading"></div>
+        <p class="status">Looking for a partner...</p>
+    </div>
+
+    <script>
+        const loadingDiv = document.querySelector('.loading');
+        const statusDiv = document.querySelector('.status');
+        let socket;
+    
+        // Try to open a WebSocket connection
+        function connectToWebSocket() {
+            socket = new WebSocket('ws://' + window.location.host + '/ws/friendship/');
+    
+            socket.onopen = () => {
+                statusDiv.textContent = 'Connected to the server. Waiting for pairing...';
+            };
+    
+            socket.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+    
+                if (data.redirect) {
+                    // Redirect to the brewing page
+                    window.location.href = data.redirect;
+                } else {
+                    statusDiv.textContent = data.message;
+                }
+            };
+    
+            socket.onclose = () => {
+                // If WebSocket closes, stay in loading state and keep waiting
+                statusDiv.textContent = 'Waiting for a partner...';
+                setTimeout(() => {
+                    connectToWebSocket();
+                }, 3000); // Attempt reconnect after 3 seconds
+            };
+        }
+    
+        // Check if there's an existing WebSocket connection
+        function checkForExistingSocket() {
+            // Call an endpoint to check for socket availability
+            fetch('/check_for_socket/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.socket_available) {
+                        // If socket is available, connect to it
+                        connectToWebSocket();
+                    } else {
+                        // If no socket is available, stay in loading state and wait
+                        statusDiv.textContent = 'Waiting for a partner...';
+                    }
+                })
+                .catch(() => {
+                    // If check fails, just stay in loading state and try again later
+                    statusDiv.textContent = 'Waiting for a partner...';
+                });
+        }
+    
+        // Initially check for a socket connection
+        checkForExistingSocket();
+    </script>
+</body>
+</html>
