@@ -58,6 +58,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             content=message
         )
 
+waiting_user = None
 
 class FriendshipConsumer(AsyncWebsocketConsumer):
     async def connect(self):
