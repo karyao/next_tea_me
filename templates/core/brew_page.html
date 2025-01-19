@@ -37,7 +37,7 @@
 
       .top-image {
         padding-top: 50px;
-        width: 80%; /* Default size for smaller screens */
+        width: 55%; /* Default size for smaller screens */
         max-width: 500px;
         height: auto;
       }
@@ -84,7 +84,7 @@
         }
 
         .top-image {
-          width: 60%;
+          width: 50%;
         }
 
         .buttons {
@@ -165,50 +165,46 @@
       .navbar {
         position: fixed;
         bottom: 20px;
-        right: 20px; /* Changed from left: 50% */
-        transform: none; /* Removed translateX */
+        right: 20px;
         display: flex;
         flex-direction: column;
-        align-items: flex-end; /* Align to the right */
+        align-items: flex-end;
         z-index: 10;
+        gap: 20px; /* Increase spacing between nav items */
+        transform: none;
       }
 
       .nav-circle {
-        width: 70px;
-        height: 70px;
-        background-color: #707d51; /* Adjusted color scheme */
+        width: 70px; /* Increase the size of the circle */
+        height: 70px; /* Match the width for a perfect circle */
+        background-color: #707d51;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Slightly bigger shadow */
         cursor: pointer;
-        overflow: hidden; /* Ensures the logo stays within the circle */
+        overflow: hidden;
         transition: transform 0.3s ease, opacity 0.3s ease;
       }
 
       .nav-circle img {
-        max-width: 80%; /* Ensures the logo fits well within the circle */
-        max-height: 80%;
-        object-fit: contain; /* Maintains the aspect ratio of the logo */
-        border-radius: 50%; /* Optional: to match the circular shape */
-      }
-
-      .nav-circle.hidden {
-        opacity: 0;
-        pointer-events: none;
+        max-width: 60%; /* Adjust to fit the larger circle */
+        max-height: 60%; /* Scale proportionally */
+        object-fit: contain;
+        border-radius: 50%;
       }
 
       .nav-menu {
         position: absolute;
         bottom: 0;
-        right: 0; /* Align to the right */
+        right: 0;
         background-color: white;
-        padding: 10px 20px;
-        border-radius: 40px;
+        padding: 20px 30px; /* Increase padding for a larger navbar */
+        border-radius: 50px;
         display: flex;
-        gap: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        gap: 30px; /* Increase spacing between menu items */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         transition: opacity 0.3s ease, transform 0.3s ease;
       }
 
@@ -216,6 +212,16 @@
         opacity: 0;
         transform: scale(0.8);
         pointer-events: none;
+      }
+
+      .nav-item {
+        font-size: 1.5rem; /* Increase icon size */
+        color: #707d51; /* Adjust color if needed */
+        transition: color 0.3s ease;
+      }
+
+      .nav-item:hover {
+        color: #5c3b2a; /* Change color on hover */
       }
     </style>
   </head>
@@ -253,21 +259,21 @@
 
       <!-- Expanded Navbar -->
       <div id="nav-menu" class="nav-menu hidden">
-        <a href="/home/" class="nav-item">
+        <a href="{% url 'brew_page' %}" class="nav-item">
           <i class="fas fa-home"></i>
-          <span>Home</span>
+          <!-- <span>Home</span> -->
         </a>
         <a href="/map/" class="nav-item">
           <i class="fas fa-map"></i>
-          <span>Map</span>
+          <!-- <span>Map</span> -->
         </a>
         <a href="/messages/" class="nav-item">
           <i class="fas fa-envelope"></i>
-          <span>Messages</span>
+          <!-- <span>Messages</span> -->
         </a>
         <a href="/settings/" class="nav-item">
           <i class="fas fa-cog"></i>
-          <span>Settings</span>
+          <!-- <span>Settings</span> -->
         </a>
       </div>
     </div>

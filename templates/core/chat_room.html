@@ -1,36 +1,92 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <style>
-    body, html {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        overflow-x: hidden;
-    }
+  body,
+  html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+  }
 </style>
-<div style="width: 100%; height: 100vh; position: relative; background: #707D51;">
-    <!-- Header Section -->
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 92px; background: #707D51; display: flex; align-items: center; justify-content: space-between;">
-        <!-- Back Button -->
-        <div style="width: 40px; height: 40px; border: 2px solid white; border-radius: 50%; background: rgba(255, 255, 255, 0.3); display: flex; align-items: center; justify-content: center; cursor: pointer;">
-            <div style="width: 6px; height: 12px; border-left: 2px solid white; border-bottom: 2px solid white; transform: rotate(45deg);"></div>
-        </div>
-        <!-- Friend's Profile Picture and Name -->
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <img src="{{ friend.profile_image.url }}" alt="Profile Picture" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-            <span style="font-size: 20px; color: white; font-weight: bold;">{{ friend.username }}</span>
-        </div>
-        <!-- Placeholder for other icons -->
-        <div style="width: 40px; height: 40px;"></div>
+<div
+  style="width: 100%; height: 100vh; position: relative; background: #707d51"
+>
+  <!-- Header Section -->
+  <div
+    style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 92px;
+      background: #707d51;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    "
+  >
+    <!-- Back Button -->
+    <div
+        id="back-button"
+      style="
+        width: 40px;
+        height: 40px;
+        border: 2px solid white;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin-left: 20px;
+      "
+    >
+      <div
+        style="
+          width: 0;
+          height: 0;
+          border-top: 10px solid transparent;
+          border-bottom: 10px solid transparent;
+          border-right: 15px solid white; /* Arrowhead color */
+          /* padding-right:5px; */
+        "
+      ></div>
     </div>
+    <!-- Friend's Profile Picture and Name -->
+    <div style="display: flex; align-items: center; gap: 12px">
+      <img
+        src="{{ friend.profile_image.url }}"
+        alt="Profile Picture"
+        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover"
+      />
+      <span style="font-size: 20px; color: white; font-weight: bold"
+        >{{ friend.username }}</span
+      >
+    </div>
+    <!-- Placeholder for other icons -->
+    <div style="width: 40px; height: 40px"></div>
+  </div>
 
-    <!-- Chat Log Section -->
-    <div id="chat-log" style="position: absolute; top: 92px; bottom: 70px; width: 100%; overflow-y: auto; background: white; padding: 16px 16px 0px 0px;">
-        {% for message in messages %}
-    <div style="margin-bottom: 8px; display: flex; justify-content: {% if message.sender == request.user %}flex-end{% else %}flex-start{% endif %};">
-        <p style="
+  <!-- Chat Log Section -->
+  <div
+    id="chat-log"
+    style="
+      position: absolute;
+      top: 92px;
+      bottom: 70px;
+      width: 100%;
+      overflow-y: auto;
+      background: white;
+      padding: 16px 16px 0px 0px;
+    "
+  >
+    {% for message in messages %}
+    <div
+      style="margin-bottom: 8px; display: flex; justify-content: {% if message.sender == request.user %}flex-end{% else %}flex-start{% endif %};"
+    >
+      <p
+        style="
             display: inline-block;
             padding: 10px;
             border-radius: 8px;
@@ -38,13 +94,77 @@
             color: #333;
             max-width: 80%;
             text-align: left;
-        ">
-            {{ message.content }}
-        </p>
+            margin-right: 20px
+        "
+      >
+        {{ message.content }}
+      </p>
     </div>
-{% endfor %}
+    {% endfor %}
+  </div>
 
+  <!-- Input Section -->
+  <div
+    style="
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: #f4fcd9;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 10px;
+    "
+  >
+    <!-- Emoji Icon -->
+    <div
+      style="
+        width: 40px;
+        height: 40px;
+        background: #534350;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <span style="font-size: 18px; color: white">😊</span>
     </div>
+    <!-- Input Field -->
+    <input
+      type="text"
+      id="chat-message-input"
+      placeholder="Start typing..."
+      style="
+        flex: 1;
+        height: 40px;
+        border: none;
+        border-radius: 20px;
+        padding: 0 12px;
+        font-size: 16px;
+        background: white;
+        outline: none;
+      "
+    />
+    <!-- Send Button -->
+    <button
+      id="chat-message-submit"
+      style="
+        width: 60px;
+        height: 40px;
+        background: #704e36;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-weight: bold;
+        margin-right: 25px;
+      "
+    >
+      Send
+    </button>
+  </div>
 
     <!-- Input Section -->
     <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 70px; background: #F4FCD9; display: flex; align-items: center; padding: 0; gap: 10px;">
@@ -60,25 +180,26 @@
 </div>
 
 <script>
-    const roomName = "{{ request.user.username }}_{{ friend.username }}";
-    const chatSocket = new WebSocket(
-        'ws://' + window.location.host + 
-        '/ws/chat/{{ request.user.username }}_{{ friend.username }}/'
-    );
+  const roomName = "{{ request.user.username }}_{{ friend.username }}";
+  const chatSocket = new WebSocket(
+    "ws://" +
+      window.location.host +
+      "/ws/chat/{{ request.user.username }}_{{ friend.username }}/"
+  );
 
-    chatSocket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        const messageDiv = document.createElement('div');
-        const isSender = data.sender === "{{ request.user.username }}";
-        
-        messageDiv.style.textAlign = isSender ? 'right' : 'left';
-        messageDiv.style.marginBottom = '8px';
-        messageDiv.innerHTML = `
+  chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    const messageDiv = document.createElement("div");
+    const isSender = data.sender === "{{ request.user.username }}";
+
+    messageDiv.style.textAlign = isSender ? "right" : "left";
+    messageDiv.style.marginBottom = "8px";
+    messageDiv.innerHTML = `
             <p style="
                 display: inline-block;
                 padding: 10px;
                 border-radius: 8px;
-                background: ${isSender ? '#D9F7E5' : '#F4F4F4'};
+                background: ${isSender ? "#D9F7E5" : "#F4F4F4"};
                 color: #333;
                 max-width: 80%;
                 text-align: left;
@@ -86,25 +207,32 @@
                 ${data.message}
             </p>
         `;
-        document.querySelector('#chat-log').appendChild(messageDiv);
-        document.querySelector('#chat-log').scrollTop = document.querySelector('#chat-log').scrollHeight;
-    };
+    document.querySelector("#chat-log").appendChild(messageDiv);
+    document.querySelector("#chat-log").scrollTop =
+      document.querySelector("#chat-log").scrollHeight;
+  };
 
-    document.querySelector('#chat-message-input').focus();
-    document.querySelector('#chat-message-input').onkeyup = function(e) {
-        if (e.keyCode === 13) {
-            document.querySelector('#chat-message-submit').click();
-        }
-    };
+  document.querySelector("#chat-message-input").focus();
+  document.querySelector("#chat-message-input").onkeyup = function (e) {
+    if (e.keyCode === 13) {
+      document.querySelector("#chat-message-submit").click();
+    }
+  };
 
-    document.querySelector('#chat-message-submit').onclick = function(e) {
-        const messageInputDom = document.querySelector('#chat-message-input');
-        const message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({
-            'message': message,
-            'receiver': "{{ friend.username }}"
-        }));
-        messageInputDom.value = '';
-    };
+  document.getElementById("back-button").addEventListener("click", function () {
+    window.location.href = "/messages/";
+  });
+
+  document.querySelector("#chat-message-submit").onclick = function (e) {
+    const messageInputDom = document.querySelector("#chat-message-input");
+    const message = messageInputDom.value;
+    chatSocket.send(
+      JSON.stringify({
+        message: message,
+        receiver: "{{ friend.username }}",
+      })
+    );
+    messageInputDom.value = "";
+  };
 </script>
 {% endblock %}
