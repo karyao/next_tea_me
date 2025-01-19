@@ -59,9 +59,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
 
-# Store the waiting user and their details
-waiting_user = None
-
 class FriendshipConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         global waiting_user
@@ -95,7 +92,14 @@ class FriendshipConsumer(AsyncWebsocketConsumer):
             }))
 
     async def disconnect(self, close_code):
-        global waiting_user
-        if waiting_user and waiting_user['consumer'] == self:
-            waiting_user = None
+        # Notify the frontend to redirect
+        try:
+            await self.send(text_data=json.dumps({"redirect": "/brew_page/"}))
+        except:
+            pass  # WebSocket might already be closed, ignore errors
 
+    async def receive(self, text_data):
+        # Handle incoming WebSocket data
+        data = json.loads(text_data)
+        message = data.get('message', '')
+        await self.send(text_data=json.dumps({"message": f"Received: {message}"}))

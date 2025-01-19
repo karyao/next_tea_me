@@ -57,29 +57,6 @@
     <div class="container">
         <h1>Time for Tea</h1>
 
-<<<<<<< HEAD
-        {% if partner %}
-            <h2>Teabag: {{ partner.username }}</h2>
-            
-            {% if already_friends %}
-                <p>You are already friends with {{ partner.username }}.</p>
-            {% else %}
-                <p>You have successfully added {{ partner.username }} as a friend!</p>
-            {% endif %}
-            
-            <a href="{% url 'chat_room' partner.username %}" class="btn">
-                Meet Now
-            </a>
-        {% else %}
-            <p>No partner found. Please try again later or manually add a friend.</p>
-            <a href="/add-friend-manually" class="btn" style="background-color: #6B46C1;">
-                Add Friend Manually
-            </a>
-        {% endif %}
-    </div>
-</body>
-</html>
-=======
 {% block content %}
 <style>
   body {
@@ -254,4 +231,3 @@
   <a href="#" class="nav-item active">💬<span>Chat</span></a>
 </div>
 {% endblock %}
->>>>>>> 04bf956 (chat and user page)
