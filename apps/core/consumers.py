@@ -59,42 +59,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
 
-# Store the waiting user and their details
-waiting_user = None
-
 class FriendshipConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        global waiting_user
-
-        # Extract user information from query parameters (or another method)
-        self.username = self.scope['query_string'].decode().split('=')[1]  # Example: ws://host/ws/friendship/?username=John
-
-        if waiting_user is None:
-            # No one is waiting, so make this user wait
-            waiting_user = {
-                'consumer': self,
-                'username': self.username
-            }
-            await self.accept()
-            await self.send(json.dumps({
-                'message': 'Waiting for a teabag...'
-            }))
-        else:
-            # Pair with the waiting user
-            partner = waiting_user
-            waiting_user = None  # Clear the waiting user
-
-            # Accept connections for both users
-            await self.accept()
-            await partner['consumer'].send(json.dumps({
-                'redirect': f'/add_friend/?partner={self.username}'
-            }))
-            await self.send(json.dumps({
-                'redirect': f'/add_friend/?partner={partner["username"]}'
-            }))
+        # Accept the WebSocket connection
+        await self.accept()
+        await self.send(text_data=json.dumps({"message": "Brewing complete!"}))
+        await self.send(text_data=json.dumps({"redirect": "/brew_page/"}))
 
     async def disconnect(self, close_code):
-        global waiting_user
-        if waiting_user and waiting_user['consumer'] == self:
-            waiting_user = None
+        # Notify the frontend to redirect
+        try:
+            await self.send(text_data=json.dumps({"redirect": "/brew_page/"}))
+        except:
+            pass  # WebSocket might already be closed, ignore errors
 
+    async def receive(self, text_data):
+        # Handle incoming WebSocket data
+        data = json.loads(text_data)
+        message = data.get('message', '')
+        await self.send(text_data=json.dumps({"message": f"Received: {message}"}))

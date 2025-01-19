@@ -1,30 +1,132 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mx-auto p-4">
-    <h1 class="text-2xl mb-4">Welcome {{ request.user.username }}</h1>
-    <h2 class="text-xl mb-2">Your Friends:</h2>
-    <ul>
-        {% for friendship in friends %}
-            {% if friendship.user1 == request.user %}
-                <li><a href="{% url 'chat_room' friendship.user2.username %}" 
-                       class="text-blue-500 hover:text-blue-700">
-                    Chat with {{ friendship.user2.username }}
-                </a></li>
-            {% else %}
-                <li><a href="{% url 'chat_room' friendship.user1.username %}"
-                       class="text-blue-500 hover:text-blue-700">
-                    Chat with {{ friendship.user1.username }}
-                </a></li>
-            {% endif %}
-        {% endfor %}
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #707D51;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+  }
+
+  .container {
+    padding: 1.5rem;
+  }
+
+  .welcome-header {
+    color: white;
+    padding: 2rem 1.5rem;
+    background-color: #707D51;
+  }
+
+  .welcome-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .friends-container {
+    background-color: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .friends-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #534350;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #F4FCD9;
+  }
+
+  .friends-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .friend-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background-color: #F4FCD9;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #534350;
+    transition: all 0.2s ease;
+  }
+
+  .friend-item:hover {
+    transform: translateX(5px);
+    background-color: #e9f2d0;
+  }
+
+  .friend-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #707D51;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: white;
+    font-weight: bold;
+  }
+
+  .friend-name {
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+
+  .chat-icon {
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+    background-color: #707D51;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.8rem;
+  }
+</style>
+
+<div class="welcome-header">
+  <h1 class="welcome-title">Welcome, {{ request.user.username }}!</h1>
+</div>
+
+<div class="container">
+  <div class="friends-container">
+    <h2 class="friends-title">Your Friends</h2>
+    <ul class="friends-list">
+      {% for friendship in friends %}
+        {% if friendship.user1 == request.user %}
+          <a href="{% url 'chat_room' friendship.user2.username %}" class="friend-item">
+            <div class="friend-icon">
+              {{ friendship.user2.username|slice:":1"|upper }}
+            </div>
+            <span class="friend-name">{{ friendship.user2.username }}</span>
+            <div class="chat-icon">💬</div>
+          </a>
+        {% else %}
+          <a href="{% url 'chat_room' friendship.user1.username %}" class="friend-item">
+            <div class="friend-icon">
+              {{ friendship.user1.username|slice:":1"|upper }}
+            </div>
+            <span class="friend-name">{{ friendship.user1.username }}</span>
+            <div class="chat-icon">💬</div>
+          </a>
+        {% endif %}
+      {% endfor %}
     </ul>
-
-    <!-- Add the JavaScript here -->
-    <script>
-        const username = encodeURIComponent("{{ request.user.username }}");
-        console.log("Logged in username:", username);
-    </script>
-
+  </div>
 </div>
 {% endblock %}

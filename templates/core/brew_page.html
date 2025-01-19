@@ -1,57 +1,319 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Example</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
     <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
+      /* General Styles */
+      body {
+        font-family: "SF Pro Text", sans-serif;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: white;
+      }
+
+      /* Container */
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 90%;
+        max-width: 1200px;
+      }
+
+      /* Responsive Layout for Image and Buttons */
+      .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .top-image {
+        padding-top: 50px;
+        width: 80%; /* Default size for smaller screens */
+        max-width: 500px;
+        height: auto;
+      }
+
+      header h1 {
+        margin-top: 0;
+        font-family: "Konkhmer Sleokchher", sans-serif;
+        font-size: 2.5rem; /* Default size */
+        color: #22172a;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      /* Media Query for Larger Screens */
+      @media (min-width: 768px) {
+        .navbar {
+          position: static;
+          margin-bottom: 20px;
+          transform: none;
+          flex-direction: row;
+          gap: 20px;
+          background-color: white;
+          padding: 10px 20px;
+          border-radius: 40px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        header {
-            background-color: #f0f0f0;
-            padding: 20px;
-            text-align: center;
-            width: 100%;
+        .nav-circle {
+          display: none;
         }
 
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        .nav-menu {
+          position: static;
+          display: flex;
+          opacity: 1;
+          transform: none;
+          pointer-events: all;
         }
+
+        .content {
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .top-image {
+          width: 60%;
+        }
+
+        .buttons {
+          align-items: flex-start;
+        }
+
+        header h1 {
+          font-size: 2rem; /* Bigger font size for larger screens */
+        }
+      }
+
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .button {
+        width: 295px;
+        height: 56px;
+        border: none;
+        border-radius: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-family: "Mplus 1p Bold", sans-serif;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .button.connect {
+        background-color: #704e36;
+        color: white;
+      }
+
+      .button.connect:hover {
+        background-color: #5c3b2a;
+      }
+
+      .button.study {
+        background-color: #707d51;
+        color: white;
+      }
+
+      .button.study:hover {
+        background-color: #505b37;
+      }
+
+      .button.create {
+        background-color: #bb9981;
+        color: white;
+      }
+
+      .button.create:hover {
+        background-color: #967a65;
+      }
+
+      @media (min-width: 768px) {
+        .content {
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .top-image {
+          width: 60%; /* Takes up half the width on larger screens */
+        }
+
+        .buttons {
+          align-items: flex-start; /* Align buttons to the left */
+        }
+      }
+
+      /* Navbar Styles */
+      .navbar {
+        position: fixed;
+        bottom: 20px;
+        right: 20px; /* Changed from left: 50% */
+        transform: none; /* Removed translateX */
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* Align to the right */
+        z-index: 10;
+      }
+
+      .nav-circle {
+        width: 70px;
+        height: 70px;
+        background-color: #707d51; /* Adjusted color scheme */
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        overflow: hidden; /* Ensures the logo stays within the circle */
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      .nav-circle img {
+        max-width: 80%; /* Ensures the logo fits well within the circle */
+        max-height: 80%;
+        object-fit: contain; /* Maintains the aspect ratio of the logo */
+        border-radius: 50%; /* Optional: to match the circular shape */
+      }
+
+      .nav-circle.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .nav-menu {
+        position: absolute;
+        bottom: 0;
+        right: 0; /* Align to the right */
+        background-color: white;
+        padding: 10px 20px;
+        border-radius: 40px;
+        display: flex;
+        gap: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .nav-menu.hidden {
+        opacity: 0;
+        transform: scale(0.8);
+        pointer-events: none;
+      }
     </style>
-</head>
-<body>
-    <header>
-        <h1>Spill the Tea</h1>
-    </header>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Content Wrapper -->
+      <div class="content">
+        <!-- Image -->
+        <img
+          src="{% static 'images/Group.png' %}"
+          alt="Decorative Group"
+          class="top-image"
+        />
 
-    <button id="connect-button">Brew</button>
+        <!-- Text Header -->
+        <header>
+          <h1>Let’s meet new people around you</h1>
+        </header>
+
+        <!-- Buttons -->
+        <div class="buttons">
+          <button id="connect-button" class="button connect">Connect</button>
+          <button id="study-button" class="button study">Study</button>
+          <button id="brew-button" class="button create">Create a Table</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Circular Navbar -->
+    <div class="navbar">
+      <!-- Main Circle (Logo Button) -->
+      <div id="nav-button" class="nav-circle">
+        <img src="{% static 'images/icon.ico' %}" alt="Logo" />
+      </div>
+
+      <!-- Expanded Navbar -->
+      <div id="nav-menu" class="nav-menu hidden">
+        <a href="/home/" class="nav-item">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="/map/" class="nav-item">
+          <i class="fas fa-map"></i>
+          <span>Map</span>
+        </a>
+        <a href="/messages/" class="nav-item">
+          <i class="fas fa-envelope"></i>
+          <span>Messages</span>
+        </a>
+        <a href="/settings/" class="nav-item">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+      </div>
+    </div>
 
     <script>
-        // Get references to the buttons
-        const connectButton = document.getElementById('connect-button');
-
-        // Add event listeners to the buttons
-        connectButton.addEventListener('click', () => {
-            window.location.href = '/brewing/'; // Redirect to the brewing page
+      // Button event listeners
+      document
+        .getElementById("connect-button")
+        .addEventListener("click", () => {
+          window.location.href = "/brewing/";
         });
+
+      document.getElementById("study-button").addEventListener("click", () => {
+        window.location.href = "/brewing/";
+      });
+
+      document.getElementById("brew-button").addEventListener("click", () => {
+        window.location.href = "/brewing/";
+      });
+
+      const navButton = document.getElementById("nav-button");
+      const navMenu = document.getElementById("nav-menu");
+
+      navButton.addEventListener("click", () => {
+        navMenu.classList.toggle("hidden");
+        navButton.classList.toggle("hidden"); // Hide/show the nav button
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!navButton.contains(e.target) && !navMenu.contains(e.target)) {
+          navMenu.classList.add("hidden");
+          navButton.classList.remove("hidden"); // Show the nav button when clicking outside
+        }
+      });
+
+      // Add click handler for the menu itself
+      navMenu.addEventListener("click", (e) => {
+        // If clicking a navigation link, hide menu and show button
+        if (e.target.closest(".nav-item")) {
+          navMenu.classList.add("hidden");
+          navButton.classList.remove("hidden");
+        }
+      });
     </script>
-</body>
+
+    <!-- Font Awesome Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+  </body>
 </html>

@@ -57,24 +57,177 @@
     <div class="container">
         <h1>Time for Tea</h1>
 
-        {% if partner %}
-            <h2>Teabag: {{ partner.username }}</h2>
-            
-            {% if already_friends %}
-                <p>You are already friends with {{ partner.username }}.</p>
-            {% else %}
-                <p>You have successfully added {{ partner.username }} as a friend!</p>
-            {% endif %}
-            
-            <a href="{% url 'chat_room' partner.username %}" class="btn">
-                Meet Now
-            </a>
-        {% else %}
-            <p>No partner found. Please try again later or manually add a friend.</p>
-            <a href="/add-friend-manually" class="btn" style="background-color: #6B46C1;">
-                Add Friend Manually
-            </a>
-        {% endif %}
-    </div>
-</body>
-</html>
+{% block content %}
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #707D51;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .header {
+    background-color: #707D51;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .back-button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+  }
+
+  .header h2 {
+    color: white;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .container {
+    background-color: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 1rem;
+    min-height: calc(100vh - 80px);
+  }
+
+  .friend-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .friend-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    background-color: #f0f0f0;
+    object-fit: cover;
+  }
+
+  .friend-details {
+    flex: 1;
+  }
+
+  .friend-name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0 0 0.25rem 0;
+    color: #000;
+  }
+
+  .last-message {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .timestamp {
+    color: #666;
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+  }
+
+  .navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-item {
+    color: #666;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8rem;
+  }
+
+  .nav-item.active {
+    color: #707D51;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #707D51;
+    border-radius: 50%;
+    margin-left: auto;
+  }
+</style>
+
+<div class="header">
+  <a href="#" class="back-button">←</a>
+  <h2>Messages</h2>
+</div>
+
+<div class="container">
+  <ul class="friend-list">
+    {% for friendship in friends %}
+      {% if friendship.user1 == request.user %}
+        {% with friend=friendship.user2 %}
+        <a href="{% url 'chat_room' friend.username %}" class="friend-item">
+          <img src="{{ friend.profile_image.url|default:'/static/default-avatar.png' }}" alt="" class="profile-pic">
+          <div class="friend-details">
+            <h3 class="friend-name">{{ friend.username }}</h3>
+            <p class="last-message">Click to start chatting...</p>
+          </div>
+          <div class="status-dot"></div>
+        </a>
+        {% endwith %}
+      {% else %}
+        {% with friend=friendship.user1 %}
+        <a href="{% url 'chat_room' friend.username %}" class="friend-item">
+          <img src="{{ friend.profile_image.url|default:'/static/default-avatar.png' }}" alt="" class="profile-pic">
+          <div class="friend-details">
+            <h3 class="friend-name">{{ friend.username }}</h3>
+            <p class="last-message">Click to start chatting...</p>
+          </div>
+          <div class="status-dot"></div>
+        </a>
+        {% endwith %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="navigation">
+  <a href="#" class="nav-item">🏠<span>Home</span></a>
+  <a href="#" class="nav-item">🔄<span>Recent</span></a>
+  <a href="#" class="nav-item">➕<span>New</span></a>
+  <a href="#" class="nav-item">👥<span>Friends</span></a>
+  <a href="#" class="nav-item active">💬<span>Chat</span></a>
+</div>
+{% endblock %}
