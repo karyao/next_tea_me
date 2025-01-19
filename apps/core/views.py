@@ -57,7 +57,7 @@ def test_login(request):
 def switch_user(request, username):
     user = User.objects.get(username=username)
     login(request, user)
-    return redirect('index')
+    return redirect('/')
 
 # def add_friend(request, username):
 #     friend = get_object_or_404(User, username=username)

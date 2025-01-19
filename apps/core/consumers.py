@@ -86,10 +86,10 @@ class FriendshipConsumer(AsyncWebsocketConsumer):
             await self.accept()
             #test
             await partner['consumer'].send(json.dumps({
-                'redirect': f'/add_friend/?partner={self.username}'
+                'redirect': f'/messages/'
             }))
             await self.send(json.dumps({
-                'redirect': f'/add_friend/?partner={partner["username"]}'
+                'redirect': f'/messages/'
             }))
 
     async def disconnect(self, close_code):
