@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl mb-4">Chat with {{ friend.username }}</h1>
+    <div id="chat-log" class="h-96 overflow-y-auto border p-4 mb-4">
+        {% for message in messages %}
+            <div class="mb-2 {% if message.sender == request.user %}text-right{% endif %}">
+                <span class="text-sm text-gray-500">{{ message.sender.username }}:</span>
+                <p class="{% if message.sender == request.user %}bg-blue-100{% else %}bg-gray-100{% endif %} p-2 rounded inline-block">
+                    {{ message.content }}
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="flex">
+        <input type="text" id="chat-message-input" class="flex-1 border p-2 mr-2">
+        <button id="chat-message-submit" class="bg-blue-500 text-white px-4 py-2 rounded">Send</button>
+    </div>
+</div>
+
+<script>
+    const roomName = "{{ request.user.username }}_{{ friend.username }}";
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + 
+        '/ws/chat/{{ request.user.username }}_{{ friend.username }}/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `mb-2 ${data.sender === "{{ request.user.username }}" ? 'text-right' : ''}`;
+        messageDiv.innerHTML = `
+            <span class="text-sm text-gray-500">${data.sender}:</span>
+            <p class="${data.sender === "{{ request.user.username }}" ? 'bg-blue-100' : 'bg-gray-100'} p-2 rounded inline-block">
+                ${data.message}
+            </p>
+        `;
+        document.querySelector('#chat-log').appendChild(messageDiv);
+        document.querySelector('#chat-log').scrollTop = document.querySelector('#chat-log').scrollHeight;
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'receiver': "{{ friend.username }}"
+        }));
+        messageInputDom.value = '';
+    };
+</script>
+{% endblock %}
