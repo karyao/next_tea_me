@@ -25,10 +25,10 @@ urlpatterns = [
     path('chat/<str:username>/', views.chat_room, name='chat_room'),
     path('test-login/', views.test_login, name='test_login'),
     path('switch-user/<str:username>/', views.switch_user, name='switch_user'),
-    path('add-friend/<str:username>/', views.add_friend, name='add_friend'),
+    #path('add-friend/<str:username>/', views.add_friend, name='add_friend'),
+    path('add_friend/', views.add_friend, name='add_friend'),
     path('brewing/', views.brewing_view, name='brewing'),
     path('brew_page/', views.brew_page, name='brew_page'),
-    path('check_for_socket/', views.check_for_socket, name='check_for_socket'),
     path('map/',views.example_map, name='example'),
     path('map/save-location/', views.save_location, name='save_location')
 ]
