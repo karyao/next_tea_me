@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,11 +39,17 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Brewing</h1>
@@ -55,9 +62,17 @@
         const statusDiv = document.querySelector('.status');
         let socket;
     
+        // Get the logged-in username from Django context
+        const username = encodeURIComponent("{{ request.user.username }}");
+    
         // Try to open a WebSocket connection
         function connectToWebSocket() {
-            socket = new WebSocket('ws://' + window.location.host + '/ws/friendship/');
+            const wsUrl = `ws://${window.location.host}/ws/friendship/?username=${username}`;
+
+            console.log("Logged in username:", username);
+            console.log("WebSocket URL:", wsUrl);
+    
+            const socket = new WebSocket(wsUrl);
     
             socket.onopen = () => {
                 statusDiv.textContent = 'Connected to the server. Waiting for pairing...';
@@ -67,7 +82,7 @@
                 const data = JSON.parse(e.data);
     
                 if (data.redirect) {
-                    // Redirect to the brewing page
+                    // Redirect to the add_friend page
                     window.location.href = data.redirect;
                 } else {
                     statusDiv.textContent = data.message;
@@ -75,36 +90,21 @@
             };
     
             socket.onclose = () => {
-                // If WebSocket closes, stay in loading state and keep waiting
-                statusDiv.textContent = 'Waiting for a partner...';
+                // Reconnect logic
+                statusDiv.textContent = 'Brewing a partner...';
                 setTimeout(() => {
                     connectToWebSocket();
-                }, 3000); // Attempt reconnect after 3 seconds
+                }, 3000);
             };
         }
+
     
         // Check if there's an existing WebSocket connection
-        function checkForExistingSocket() {
-            // Call an endpoint to check for socket availability
-            fetch('/check_for_socket/')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.socket_available) {
-                        // If socket is available, connect to it
-                        connectToWebSocket();
-                    } else {
-                        // If no socket is available, stay in loading state and wait
-                        statusDiv.textContent = 'Waiting for a partner...';
-                    }
-                })
-                .catch(() => {
-                    // If check fails, just stay in loading state and try again later
-                    statusDiv.textContent = 'Waiting for a partner...';
-                });
-        }
-    
-        // Initially check for a socket connection
-        checkForExistingSocket();
+        document.addEventListener('DOMContentLoaded', () => {
+            connectToWebSocket();
+        });
     </script>
+    
 </body>
+
 </html>

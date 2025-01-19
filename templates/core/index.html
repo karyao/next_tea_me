@@ -19,5 +19,12 @@
             {% endif %}
         {% endfor %}
     </ul>
+
+    <!-- Add the JavaScript here -->
+    <script>
+        const username = encodeURIComponent("{{ request.user.username }}");
+        console.log("Logged in username:", username);
+    </script>
+
 </div>
 {% endblock %}
